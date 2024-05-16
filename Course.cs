@@ -5,53 +5,27 @@ using System.Net.Http.Headers;
 // Namespace - How to organize Classes
 namespace College 
 {   
-
-    public class Schedule
-    {
-        static private List<Term> terms = new List<Term>();
-        public void AddTerm(Term newTerm)
-        {
-            terms.Add(newTerm);
-        }
-    }
-
-
-    public class Term
-    {
-        public string termName { get; set; }
-        private List<Course> courses;
-
-        public Term(string newTermName, Course newCourse)
-        {
-            termName = newTermName;
-            courses = new List<Course>
-            {
-                newCourse
-            };
-        }
-        public void AddClassToTerm(Course newCourse)
-        {
-            courses.Add(newCourse);
-        }
-    }
     public class Course
     {
-        private string name;
-        private string subject;
-        private string courseShort;
+        public string name { get; private set; }
+        public string subject { get; private set; }
+        public string courseShort { get; private set; }
         private int id;
-        private string termTaken;
+        private string term;
+
+        private int year;
         private string grade;
-        private double gpa;
+        public double gpa {get; private set;}
 
         // Constructor
-        public Course(string newname, string newsubject, string newid, string newtermTaken, string newgrade)
+        public Course(string newname, string newsubject, string newid, string newyear, string newterm, string newgrade)
         {
             name = newname;
             subject = newsubject;
             courseShort = newsubject + " " + newid;
             id = Convert.ToInt32(newid);
-            termTaken = newtermTaken;
+            term = newterm;
+            year = Convert.ToInt32(newyear);
             grade = newgrade;
 
             switch (newgrade) 
@@ -99,20 +73,31 @@ namespace College
             }
         }
 
-        // Getters
-        public void print_course()
+        public int get_year()
         {
-            Console.WriteLine("********************************");
-            Console.WriteLine(courseShort + ": " + name);
-            Console.WriteLine(termTaken);
-            Console.WriteLine("Grade Received: " + grade);
+            return year;
+        }
+        public int orderbyterm()
+        {
+            switch (term)
+            {
+                case "Winter": return 1;
+                case "Spring": return 2;
+                case "Summer": return 3;
+                case "Fall": return 4;
+                default: return 0;
+            }
+        }
+        
+        public string print_course()
+        {
+           return courseShort + ": " + name + ": " + term + " " + year + "  " + grade;
         }
 
-        public string get_name()
+        public string write_course()
         {
-            return name;
-        } 
-    
+            return subject + "," + Convert.ToString(id) + "," + name + "," + term + ',' + year + ',' + grade + ',' + gpa + "\n";
+        }
     }   
 
 }
